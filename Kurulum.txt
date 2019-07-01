@@ -1,0 +1,41 @@
+--Kurulum-- vJoy
+"vJoySetup.exe" ile sanal aygiti kurun
+"vJoy" klasorunun icindeki "vJoyConfig.exe"yi acip yeni bir aygit olusturun.
+
+--Program ile-- Virtual Controller
+"Virtual Controller v1051 Setup.exe" veya baska bir sanal aygit kontrolcusu kurun
+daha sonra "Options"e girip 'Input'den okunacak aygiti secin ve 'Enabled'yi acin.
+'Output'den "Vjoy"u secip 'Enable'yi acin. 
+Daha sonra "Controls" ile butonlari ve eksenleri belirleyin.
+(Diger aygitlara donusturmek icin digerlerini secebilirsiniz)
+
+--Kodlayarak-- vJoy Feeder kodlayin
+Daha fazla bilgi http://vjoystick.sourceforge.net/site/index.php/dev216/writing-a-feeder-application
+Visual Studio C# ile "FeederDemoCS" projesinde duzenleme yapabilir yada asagidaki adimlari izleyerek 'Feeder'(vJoy sanal aygiti yonetin) yazabilirsiniz.
+1) "vJoy218SDK-291116.zip" icindeki "CreateSdk.bat"i calistirin.
+2) "x64-x86/vJoyInterfaceWrap.dll"yi projenize 'basvuru' olarak ekleyin.
+3) "x64-x86/vJoyInterface.dll"yi projenize 'var olan oge' olarak ekleyin ve ozelliklerden 'Her zaman kopyala' ozelligini acin.
+4) Dikkat: Projeye eklenen "*.dll" 'x64' ise Visual Studio'da yapilandirma yoneticisinden, hedef yapilandirmayi 'x64' yapin, degilse 'x86' olarak degistirin.
+5) Ornek Kodlar: C# Hey VJoy Controller - Feeder
+"
+using vJoyInterfaceWrap;
+class Program
+{
+    static void Main(string[] args)
+    {
+        uint id = 1;
+        vJoy joystick = new vJoy();
+        if (joystick.vJoyEnabled() && joystick.AcquireVJD(id))
+        {
+            int X = 0;
+            while (true)
+            {
+                X = X <= 32767 ? X + 1 : 0;
+                joystick.SetAxis(X, id, HID_USAGES.HID_USAGE_X);
+            }
+        }
+    }
+}
+"
+Diger Ornekler Icin https://csharp.hotexamples.com/examples/vJoyInterfaceWrap/vJoy/vJoyEnabled/php-vjoy-vjoyenabled-method-examples.html
+---Hazirlayan Halil Emre Yildiz---
